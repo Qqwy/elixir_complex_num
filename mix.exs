@@ -28,8 +28,10 @@ defmodule ComplexNum.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
+      {:numbers, "~> 2.0"},
       {:decimal, "~> 1.3"},
-      {:ratio, "~> 1.1"}
+      {:ratio, "~> 1.1"},
+
     ]
   end
 end
