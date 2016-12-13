@@ -33,14 +33,15 @@ defmodule ComplexNum do
 
 
   @doc """
-  TODO
+  Multiplies `ca` by `cb`. This is a precise operation for numbers in both Cartesian and Polar forms.
   """
   def mult(ca, cb)
 
   @doc """
-  TODO
+  Divides `ca` by `cb`. This is a precise operation for numbers in both Cartesian and Polar forms.
   """
   def div(ca, cb)
+
 
   operations_that_convert_polar_to_cartesian = [add: true, sub: true, mult: false, div: false]
   for {operation, even_if_both_are_polar?} <- operations_that_convert_polar_to_cartesian do
@@ -71,7 +72,46 @@ defmodule ComplexNum do
   end
 
 
-  unary_operations = [abs: false, minus: true]
+  @doc """
+  The absolute value of a Complex Number `ca` has as real part the same magnitude as `ca`,
+  but as imaginary part `0`.
+
+  This is a precise operation for numbers in Polar form, but a lossy operation for numbers in Cartesian form.
+  """
+  def abs(complex)
+
+  @doc  """
+  The negation of a Complex Number: Both the real and imaginary parts are negated.
+
+  This is a precise operation for numbers in Cartesian form, but a lossy operation for numbers in Polar form.
+  """
+  def minus(complex)
+
+  @doc """
+  Returns the magnitude of the Complex Number.
+
+  This is a precise operation for numbers in Polar form, but a lossy operation for numbers in Cartesian form.
+
+  If you only need to e.g. sort on magnitudes, consider `magnitude_squared/2` instead, which is also precise for numbers in Cartesian form.
+  """
+  def magnitude(complex)
+
+  @doc """
+  The squared magnitude of the Complex Number.
+
+  This is a precise operation for both Cartesian and Polar form.
+  """
+  def magnitude_squared(complex)
+
+
+  @doc """
+  Returns the `angle` of the complex number.
+
+  This is a precise operation for numbers in Polar form, but a lossy operation for numbers in Cartesian form.
+  """
+  def angle(complex)
+
+  unary_operations = [abs: false, minus: true, magnitude: false, angle: false, magnitude_squared: false]
   for {operation, convert_polar_to_cartesian?} <- unary_operations do
 
     if convert_polar_to_cartesian? do
@@ -88,19 +128,17 @@ defmodule ComplexNum do
       Cartesian.unquote(operation)(ca)
     end
 
-
   end
 
   @doc """
   Power function: computes `base^exponent`,
-  where `base` is Numeric,
+  where `base` is a Complex Number,
   and `exponent` _has_ to be an integer.
 
   This means that it is impossible to calculate roots by using this function.
 
-
-  `pow` is fast for numbers in Polar form.
-  For numbers in Cartesian form, the Exponentiation by Squaring algorithm is used.
+  `pow` is fast (constant time) for numbers in Polar form.
+  For numbers in Cartesian form, the Exponentiation by Squaring algorithm is used, which performs `log n` multiplications.
   """
   def pow(base = %ComplexNum{mode: Polar}, exponent) when is_integer(exponent) do
     Polar.pow(base, exponent)
@@ -110,7 +148,22 @@ defmodule ComplexNum do
       Cartesian.pow(base, exponent)
   end
 
-  
+
+  @doc """
+  Converts a Complex Number to Cartesian Form.
+
+  This is a lossy operation (unless the number already is in Cartesian form).
+  """
+  def to_cartesian(ca = %ComplexNum{mode: Cartesian}), do: ca
+  def to_cartesian(pa = %ComplexNum{mode: Polar}), do: Polar.to_cartesian(pa)
+
+  @doc """
+  Converts a Complex Number to Polar Form.
+
+  This is a lossy operation (unless the number already is in Polar form).
+  """
+  def to_polar(pa = %ComplexNum{mode: Polar}), do: pa
+  def to_polar(ca = %ComplexNum{mode: Cartesian}), do: Cartesian.to_polar(ca)
 
 end
 

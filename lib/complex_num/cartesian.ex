@@ -147,28 +147,6 @@ defmodule ComplexNum.Cartesian do
     new(N.minus(ca.real), N.minus(ca.imaginary))
   end
 
-
-  def to_polar(ca = %ComplexNum{mode: Cartesian, real: %numericType{}}) do
-    float_conversion = do_to_polar(ca)
-
-    converted_magnitude = numericType.new(float_conversion.real)
-    converted_angle = numericType.new(float_conversion.imaginary)
-    ComplexNum.Polar.new(converted_magnitude, converted_angle)
-  end
-  def to_polar(ca = %ComplexNum{mode: Cartesian, imaginary: %numericType{}}) do
-    float_conversion = do_to_polar(ca)
-
-    converted_magnitude = numericType.new(float_conversion.real)
-    converted_angle = numericType.new(float_conversion.imaginary)
-    ComplexNum.Polar.new(converted_magnitude, converted_angle)
-  end
-
-
-  defp do_to_polar(ca = %ComplexNum{mode: Cartesian}) do
-    angle = :math.atan2(N.to_float(ca.imaginary), N.to_float(ca.real))
-    ComplexNum.Polar.new(magnitude(ca), angle)
-  end
-
   def pow(base = %ComplexNum{mode: Cartesian}, exponent) when is_integer(exponent) do
     pow_by_sq(base, exponent)
   end
@@ -187,5 +165,31 @@ defmodule ComplexNum.Cartesian do
   defp do_pow_by_sq(x, n, y) when rem(n, 2) == 0, do: do_pow_by_sq(mult(x, x), Kernel.div(n, 2), y)
   defp do_pow_by_sq(x, n, y), do: do_pow_by_sq(mult(x, x), Kernel.div((n - 1), 2), mult(x, y))
   
+  def angle(ca = %ComplexNum{mode: Cartesian}) do
+    :math.atan2(N.to_float(ca.imaginary), N.to_float(ca.real))
+  end
+
+
+  def to_polar(ca = %ComplexNum{mode: Cartesian, real: %numericType{}}) do
+    float_conversion = do_to_polar(ca)
+
+    converted_magnitude = numericType.new(float_conversion.real)
+    converted_angle = numericType.new(float_conversion.imaginary)
+    ComplexNum.Polar.new(converted_magnitude, converted_angle)
+  end
+  def to_polar(ca = %ComplexNum{mode: Cartesian, imaginary: %numericType{}}) do
+    float_conversion = do_to_polar(ca)
+
+    converted_magnitude = numericType.new(float_conversion.real)
+    converted_angle = numericType.new(float_conversion.imaginary)
+    ComplexNum.Polar.new(converted_magnitude, converted_angle)
+  end
+
+
+  defp do_to_polar(ca = %ComplexNum{mode: Cartesian}) do
+    angle = angle(ca)
+    ComplexNum.Polar.new(magnitude(ca), angle)
+  end
+
 
 end
