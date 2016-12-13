@@ -1,4 +1,4 @@
-defmodule ComplexNum.RealHelper do
+defmodule Number do
   @moduledoc """
   Exposes helper functions to perform math on numbers which might be
   custom data types.
@@ -57,7 +57,7 @@ defmodule ComplexNum.RealHelper do
     end
 
     # struct + struct
-    def unquote(name)(a = %numericyType{}, b = %numericType{}) do
+    def unquote(name)(a = %numericType{}, b = %numericType{}) do
       numericType.unquote(name)(a, b)
     end
 
