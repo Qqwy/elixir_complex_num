@@ -1,5 +1,6 @@
 defmodule ComplexNum.Cartesian do
   import Kernel, except: [div: 2]
+  alias ComplexNum.{Cartesian, Polar}
 
   @moduledoc """
   A simple Complex Number in the form of `a + b*i`.
@@ -101,10 +102,12 @@ defmodule ComplexNum.Cartesian do
 
     new(real, imaginary)
   end
+
+  def div(1, cb = %ComplexNum{mode: Cartesian}), do: reciprocal(cb)
   def div(a, cb = %ComplexNum{mode: Cartesian}), do: div(new(a), cb)
   def div(ca = %ComplexNum{mode: Cartesian}, b), do: div(ca, new(b))
 
-  @doc "1 / ca"
+  @doc "This i the same as 1 / ca"
   def reciprocal(ca = %ComplexNum{mode: Cartesian}) do
       denom = N.add(N.mult(ca.real, ca.real), N.mult(ca.imaginary, ca.imaginary))
       real = N.div(ca.real, denom)
@@ -148,21 +151,41 @@ defmodule ComplexNum.Cartesian do
   def to_polar(ca = %ComplexNum{mode: Cartesian, real: %numericType{}}) do
     float_conversion = do_to_polar(ca)
 
-    converted_magnitude = numericType.new(float_conversion.magnitude)
-    converted_angle = numericType.new(float_conversion.angle)
+    converted_magnitude = numericType.new(float_conversion.real)
+    converted_angle = numericType.new(float_conversion.imaginary)
     ComplexNum.Polar.new(converted_magnitude, converted_angle)
   end
+  def to_polar(ca = %ComplexNum{mode: Cartesian, imaginary: %numericType{}}) do
+    float_conversion = do_to_polar(ca)
+
+    converted_magnitude = numericType.new(float_conversion.real)
+    converted_angle = numericType.new(float_conversion.imaginary)
+    ComplexNum.Polar.new(converted_magnitude, converted_angle)
+  end
+
 
   defp do_to_polar(ca = %ComplexNum{mode: Cartesian}) do
     angle = :math.atan2(N.to_float(ca.imaginary), N.to_float(ca.real))
     ComplexNum.Polar.new(magnitude(ca), angle)
   end
 
+  def pow(base = %ComplexNum{mode: Cartesian}, exponent) when is_integer(exponent) do
+    pow_by_sq(base, exponent)
+  end
+
+  # Small powers
+  defp pow_by_sq(x, 1), do: x
+  defp pow_by_sq(x, 2), do: mult(x, x)
+  defp pow_by_sq(x, 3), do: mult(mult(x, x), x)
+  defp pow_by_sq(x, n) when is_integer(n), do: do_pow_by_sq(x, n)
+
+  # Exponentiation By Squaring.
+  defp do_pow_by_sq(x, n, y \\ 1)
+  defp do_pow_by_sq(_x, 0, y), do: y
+  defp do_pow_by_sq(x, 1, y), do: mult(x, y)
+  defp do_pow_by_sq(x, n, y) when n < 0, do: do_pow_by_sq(div(1, x), Kernel.-(n), y)
+  defp do_pow_by_sq(x, n, y) when rem(n, 2) == 0, do: do_pow_by_sq(mult(x, x), Kernel.div(n, 2), y)
+  defp do_pow_by_sq(x, n, y), do: do_pow_by_sq(mult(x, x), Kernel.div((n - 1), 2), mult(x, y))
+  
 
 end
-
-# defimpl Inspect, for: ComplexNum.Cartesian do
-#   def inspect(ca = %ComplexNum.Cartesian{}, _opts) do
-#     "#ComplexNum.Cartesian<#{inspect(ca.real)} + #{inspect(ca.imaginary)}·𝑖>"
-#   end
-# end

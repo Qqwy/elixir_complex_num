@@ -2,6 +2,8 @@ defmodule ComplexNum.Polar do
   # Uses the `real` part of the ComplexNum struct to store the `magnitude`
   # And uses the `imaginary` part of the ComplexNum struct to store the `angle`.
 
+  alias ComplexNum.{Cartesian, Polar}
+
   alias Numbers, as: N
 
   def new(magnitude, angle \\ 0)
@@ -42,9 +44,3 @@ defmodule ComplexNum.Polar do
     ComplexNum.new(real, imaginary)
   end
 end
-
-# defimpl Inspect, for: ComplexNum.Polar do
-#   def inspect(ca = %ComplexNum.Polar{}, _opts) do
-#     "#ComplexNum.Cartesian<#{inspect(ca.magnitude)} · e^(𝑖#{inspect(ca.angle)})>"
-#   end
-# end
