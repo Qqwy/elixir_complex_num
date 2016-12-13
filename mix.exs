@@ -3,11 +3,14 @@ defmodule ComplexNum.Mixfile do
 
   def project do
     [app: :complex_num,
-     version: "0.1.0",
+     version: "0.2.0",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps()]
+     deps: deps(),
+     description: description(),
+     package: package()
+    ]
   end
 
   # Configuration for the OTP application
@@ -28,10 +31,28 @@ defmodule ComplexNum.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
+      {:earmark, ">= 0.0.0", only: [:dev]}, # Markdown, dependency of ex_doc
+      {:ex_doc, "~> 0.14", only: [:dev]},    # Documentation for Hex.pm
       {:numbers, "~> 2.0"},
       {:decimal, "~> 1.3"},
-      {:ratio, "~> 1.1"},
+      {:ratio, "~> 1.2"},
 
+    ]
+  end
+
+  defp description do
+    """
+    ComplexNum allows you to do math with Complex Numbers. Both Cartesian and Polar form are supported.
+    """
+  end
+
+  defp package do
+    [# These are the default files included in the package
+      name: :numbers,
+      files: ["lib", "mix.exs", "README*", "LICENSE"],
+      maintainers: ["Wiebe-Marten Wijnja/Qqwy"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/Qqwy/elixir_number/"}
     ]
   end
 end
