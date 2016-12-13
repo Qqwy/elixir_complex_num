@@ -38,9 +38,19 @@ defmodule ComplexNum.Polar do
     new(N.pow(pa.real, exponent), N.mult(pa.imaginary, exponent))
   end
 
+  @doc """
+  Returns a Complex Number with the same magnitude as this one,
+  but with the imaginary part being `0`.
+  """
+  def abs(pa = %ComplexNum{mode: Polar}) do
+    ComplexNum.new(pa.real, 0)
+  end
+
+
   def to_cartesian(pa = %ComplexNum{mode: Polar}) do
     real = N.mult(pa.real, :math.cos(N.to_float(pa.imaginary)))
     imaginary = N.mult(pa.real, :math.sin(N.to_float(pa.imaginary)))
     ComplexNum.new(real, imaginary)
   end
+  
 end

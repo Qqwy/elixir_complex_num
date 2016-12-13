@@ -14,7 +14,6 @@ defmodule ComplexNum do
     end
   end
 
-  delegatable_binary_funs = [:add, :sub, :mult, :div, :pow]
 
   @doc """
   Adds two `ComplexNum`s together.
@@ -31,6 +30,17 @@ defmodule ComplexNum do
   If one or both are Polar, this is a lossy operation, as they are first converted to Cartesian.
   """
   def sub(ca, cb)
+
+
+  @doc """
+  TODO
+  """
+  def mult(ca, cb)
+
+  @doc """
+  TODO
+  """
+  def div(ca, cb)
 
   operations_that_convert_polar_to_cartesian = [add: true, sub: true, mult: false, div: false]
   for {operation, even_if_both_are_polar?} <- operations_that_convert_polar_to_cartesian do
@@ -58,6 +68,27 @@ defmodule ComplexNum do
     def unquote(operation)(ca = %ComplexNum{mode: Cartesian}, cb = %ComplexNum{mode: Cartesian}) do
       Cartesian.unquote(operation)(ca, cb)
     end
+  end
+
+
+  unary_operations = [abs: false, minus: true]
+  for {operation, convert_polar_to_cartesian?} <- unary_operations do
+
+    if convert_polar_to_cartesian? do
+      def unquote(operation)(ca = %ComplexNum{mode: Polar}) do
+        Cartesian.unquote(operation)(Polar.to_cartesian(ca))
+      end
+    else
+      def unquote(operation)(ca = %ComplexNum{mode: Polar}) do
+        Polar.unquote(operation)(ca)
+      end
+    end
+
+    def unquote(operation)(ca = %ComplexNum{mode: Cartesian}) do
+      Cartesian.unquote(operation)(ca)
+    end
+
+
   end
 
   @doc """
