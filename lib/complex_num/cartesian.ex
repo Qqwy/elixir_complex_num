@@ -31,43 +31,43 @@ defmodule ComplexNum.Cartesian do
   """
   def new(real, imaginary \\ 0)
   def new(real, imaginary) when is_number(real) and is_number(imaginary) do
-    %ComplexNum{mode: :cartesian, real: real, imaginary: imaginary}
+    %ComplexNum{mode: Cartesian, real: real, imaginary: imaginary}
   end
   def new(real = %numeric{}, imaginary = %numeric{}) do
-    %ComplexNum{mode: :cartesian, real: real, imaginary: imaginary}
+    %ComplexNum{mode: Cartesian, real: real, imaginary: imaginary}
   end
   def new(real = %numeric{}, imaginary) when is_number(imaginary) do
-    %ComplexNum{mode: :cartesian, real: real, imaginary: numeric.new(imaginary)}
+    %ComplexNum{mode: Cartesian, real: real, imaginary: numeric.new(imaginary)}
   end
   def new(real, imaginary = %numeric{}) when is_number(real) do
-    %ComplexNum{mode: :cartesian, real: numeric.new(real), imaginary: imaginary}
+    %ComplexNum{mode: Cartesian, real: numeric.new(real), imaginary: imaginary}
   end
 
 
 
   def imaginary(num), do: new(0, num)
 
-  def real_part(ca = %ComplexNum{mode: :cartesian}), do: ca.real
+  def real_part(ca = %ComplexNum{mode: Cartesian}), do: ca.real
   def real_part(a), do: a
 
-  def imaginary_part(ca = %ComplexNum{mode: :cartesian}), do: ca.imaginary
+  def imaginary_part(ca = %ComplexNum{mode: Cartesian}), do: ca.imaginary
   def imaginary_part(_a), do: 0
 
-  def add(ca = %ComplexNum{mode: :cartesian}, cb = %ComplexNum{mode: :cartesian}) do
+  def add(ca = %ComplexNum{mode: Cartesian}, cb = %ComplexNum{mode: Cartesian}) do
     new(N.add(ca.real, cb.real), N.add(ca.imaginary, cb.imaginary))
   end
-  def add(a, cb = %ComplexNum{mode: :cartesian}), do: add(new(a), cb)
-  def add(ca = %ComplexNum{mode: :cartesian}, b), do: add(ca, new(b))
+  def add(a, cb = %ComplexNum{mode: Cartesian}), do: add(new(a), cb)
+  def add(ca = %ComplexNum{mode: Cartesian}, b), do: add(ca, new(b))
 
 
 
-  def sub(ca = %ComplexNum{mode: :cartesian}, cb = %ComplexNum{mode: :cartesian}) do
+  def sub(ca = %ComplexNum{mode: Cartesian}, cb = %ComplexNum{mode: Cartesian}) do
     new(N.sub(ca.real, cb.real), N.sub(ca.imaginary, cb.imaginary))
   end
-  def sub(a, cb = %ComplexNum{mode: :cartesian}), do: sub(new(a), cb)
-  def sub(ca = %ComplexNum{mode: :cartesian}, b), do: sub(ca, new(b))
+  def sub(a, cb = %ComplexNum{mode: Cartesian}), do: sub(new(a), cb)
+  def sub(ca = %ComplexNum{mode: Cartesian}, b), do: sub(ca, new(b))
 
-  def mult(ca = %ComplexNum{mode: :cartesian}, cb = %ComplexNum{mode: :cartesian}) do
+  def mult(ca = %ComplexNum{mode: Cartesian}, cb = %ComplexNum{mode: Cartesian}) do
     # (a + bi) * (c + di)
 
     # (a * c) - (b * d)
@@ -78,16 +78,16 @@ defmodule ComplexNum.Cartesian do
 
     new(real, imaginary)
   end
-  def mult(a, cb = %ComplexNum{mode: :cartesian}), do: mult(new(a), cb)
-  def mult(ca = %ComplexNum{mode: :cartesian}, b), do: mult(ca, new(b))
+  def mult(a, cb = %ComplexNum{mode: Cartesian}), do: mult(new(a), cb)
+  def mult(ca = %ComplexNum{mode: Cartesian}, b), do: mult(ca, new(b))
 
-  def conjugate(ca = %ComplexNum{mode: :cartesian}) do
+  def conjugate(ca = %ComplexNum{mode: Cartesian}) do
     new(ca.real, N.minus(ca.imaginary))
   end
   def conjugate(a), do: new(a) # as -0 === 0
 
 
-  def div(ca = %ComplexNum{mode: :cartesian}, cb = %ComplexNum{mode: :cartesian}) do
+  def div(ca = %ComplexNum{mode: Cartesian}, cb = %ComplexNum{mode: Cartesian}) do
     # (a + bi)/(c + di)
 
     # denom = c^2 + d^2
@@ -101,11 +101,11 @@ defmodule ComplexNum.Cartesian do
 
     new(real, imaginary)
   end
-  def div(a, cb = %ComplexNum{mode: :cartesian}), do: div(new(a), cb)
-  def div(ca = %ComplexNum{mode: :cartesian}, b), do: div(ca, new(b))
+  def div(a, cb = %ComplexNum{mode: Cartesian}), do: div(new(a), cb)
+  def div(ca = %ComplexNum{mode: Cartesian}, b), do: div(ca, new(b))
 
   @doc "1 / ca"
-  def reciprocal(ca = %ComplexNum{mode: :cartesian}) do
+  def reciprocal(ca = %ComplexNum{mode: Cartesian}) do
       denom = N.add(N.mult(ca.real, ca.real), N.mult(ca.imaginary, ca.imaginary))
       real = N.div(ca.real, denom)
       imaginary = N.div(N.minus(ca.imaginary), denom)
@@ -116,9 +116,9 @@ defmodule ComplexNum.Cartesian do
   Calculates the magnitude of the Cartesian Complex Number.
   As this is done using Pythagoras, i.e. c = sqrt(a*a + b*b), this is a lossy operation where (a*a+b*b) is converted to a float.
   """
-  def magnitude(ca = %ComplexNum{mode: :cartesian, real: 0}, do: ca.imaginary
-  def magnitude(ca = %ComplexNum{mode: :cartesian, imaginary: 0}, do: ca.real
-  def magnitude(ca = %ComplexNum{mode: :cartesian}) do
+  def magnitude(ca = %ComplexNum{mode: Cartesian, real: 0}), do: ca.imaginary
+  def magnitude(ca = %ComplexNum{mode: Cartesian, imaginary: 0}), do: ca.real
+  def magnitude(ca = %ComplexNum{mode: Cartesian}) do
     :math.sqrt(N.to_float(magnitude_squared(ca)))
   end
 
@@ -126,7 +126,7 @@ defmodule ComplexNum.Cartesian do
   Returns the square of the magnitude of the Cartesian Complex Number.
   Because it is not necessary to calculate a square root, this is a precise operation.
   """
-  def magnitude_squared(ca = %ComplexNum{mode: :cartesian}) do
+  def magnitude_squared(ca = %ComplexNum{mode: Cartesian}) do
     N.add(N.mult(ca.real, ca.real),N.mult(ca.imaginary, ca.imaginary))
   end
 
@@ -136,16 +136,16 @@ defmodule ComplexNum.Cartesian do
 
   This is a lossy operation, as calculating the magnitude of a Cartesian Complex number is a lossy operation.
   """
-  def abs(ca = %ComplexNum{mode: :cartesian}) do
+  def abs(ca = %ComplexNum{mode: Cartesian}) do
     new(magnitude(ca), 0)
   end
 
-  def minus(ca = %ComplexNum{mode: :cartesian}) do
+  def minus(ca = %ComplexNum{mode: Cartesian}) do
     new(N.minus(ca.real), N.minus(ca.imaginary))
   end
 
 
-  def to_polar(ca = %ComplexNum{mode: :cartesian, real: %numericType{}}) do
+  def to_polar(ca = %ComplexNum{mode: Cartesian, real: %numericType{}}) do
     float_conversion = do_to_polar(ca)
 
     converted_magnitude = numericType.new(float_conversion.magnitude)
@@ -153,7 +153,7 @@ defmodule ComplexNum.Cartesian do
     ComplexNum.Polar.new(converted_magnitude, converted_angle)
   end
 
-  defp do_to_polar(ca = %ComplexNum{mode: :cartesian}) do
+  defp do_to_polar(ca = %ComplexNum{mode: Cartesian}) do
     angle = :math.atan2(N.to_float(ca.imaginary), N.to_float(ca.real))
     ComplexNum.Polar.new(magnitude(ca), angle)
   end
@@ -161,8 +161,8 @@ defmodule ComplexNum.Cartesian do
 
 end
 
-defimpl Inspect, for: ComplexNum.Cartesian do
-  def inspect(ca = %ComplexNum.Cartesian{}, _opts) do
-    "#ComplexNum.Cartesian<#{inspect(ca.real)} + #{inspect(ca.imaginary)}·𝑖>"
-  end
-end
+# defimpl Inspect, for: ComplexNum.Cartesian do
+#   def inspect(ca = %ComplexNum.Cartesian{}, _opts) do
+#     "#ComplexNum.Cartesian<#{inspect(ca.real)} + #{inspect(ca.imaginary)}·𝑖>"
+#   end
+# end

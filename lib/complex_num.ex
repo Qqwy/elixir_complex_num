@@ -1,5 +1,5 @@
 defmodule ComplexNum do
-  defstruct [:real, :imaginary, mode: :cartesian]
+  defstruct [:real, :imaginary, mode: Cartesian]
 
   alias ComplexNum.{Cartesian, Polar}
 
@@ -27,5 +27,15 @@ defmodule ComplexNum do
     Cartesian.add(ca, cb)
   end
 
+
+end
+
+defimpl Inspect, for: ComplexNum do
+  def inspect(polar = %ComplexNum{mode: Polar}, _opts) do
+    "#ComplexNum (Polar) <#{inspect(polar.real)} · e^(𝑖#{inspect(polar.imaginary)})>"
+  end
+  def inspect(ca = %ComplexNum{mode: Cartesian}, _opts) do
+    "#ComplexNum (Cartesian)<#{inspect(ca.real)} + #{inspect(ca.imaginary)}·𝑖>"
+  end
 
 end
