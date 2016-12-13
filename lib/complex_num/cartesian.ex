@@ -1,6 +1,6 @@
 defmodule ComplexNum.Cartesian do
   import Kernel, except: [div: 2]
-  alias ComplexNum.{Cartesian, Polar}
+  alias ComplexNum.{Cartesian}
 
   @moduledoc """
   A simple Complex Number in the form of `a + b*i`.
@@ -44,15 +44,11 @@ defmodule ComplexNum.Cartesian do
     %ComplexNum{mode: Cartesian, real: numeric.new(real), imaginary: imaginary}
   end
 
+  def real(ca = %ComplexNum{mode: Cartesian}), do: ca.real
+  def real(a), do: a
 
-
-  def imaginary(num), do: new(0, num)
-
-  def real_part(ca = %ComplexNum{mode: Cartesian}), do: ca.real
-  def real_part(a), do: a
-
-  def imaginary_part(ca = %ComplexNum{mode: Cartesian}), do: ca.imaginary
-  def imaginary_part(_a), do: 0
+  def imaginary(ca = %ComplexNum{mode: Cartesian}), do: ca.imaginary
+  def imaginary(_a), do: 0
 
   def add(ca = %ComplexNum{mode: Cartesian}, cb = %ComplexNum{mode: Cartesian}) do
     new(N.add(ca.real, cb.real), N.add(ca.imaginary, cb.imaginary))

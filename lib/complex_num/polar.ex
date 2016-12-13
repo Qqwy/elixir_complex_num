@@ -2,7 +2,7 @@ defmodule ComplexNum.Polar do
   # Uses the `real` part of the ComplexNum struct to store the `magnitude`
   # And uses the `imaginary` part of the ComplexNum struct to store the `angle`.
 
-  alias ComplexNum.{Cartesian, Polar}
+  alias ComplexNum.{Polar}
 
   alias Numbers, as: N
 
@@ -20,11 +20,13 @@ defmodule ComplexNum.Polar do
     %ComplexNum{mode: Polar, real: numeric.new(magnitude), imaginary: angle}
   end
 
-  def magnitude_part(pa = %ComplexNum{mode: Polar}), do: pa.real
-  def magnitude_part(number), do: number
+  def magnitude(pa = %ComplexNum{mode: Polar}), do: pa.real
+  def magnitude(number), do: number
 
-  def angle_part(pa = %ComplexNum{mode: Polar}), do: pa.imaginary
-  def angle_part(number), do: number
+  def magnitude_squared(pa = %ComplexNum{mode: Polar}), do: N.mult(pa.real, pa.real)
+
+  def angle(pa = %ComplexNum{mode: Polar}), do: pa.imaginary
+  def angle(number), do: number
 
   def mult(pa = %ComplexNum{mode: Polar}, pb = %ComplexNum{mode: Polar}) do
     new(N.mult(pa.real, pb.real), N.add(pa.imaginary, pb.imaginary))
