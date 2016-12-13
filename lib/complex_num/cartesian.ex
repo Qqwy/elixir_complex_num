@@ -143,8 +143,24 @@ defmodule ComplexNum.Cartesian do
   end
 
 
-  def to_polar(ca = %__MODULE__{}) do
+  def to_polar(ca = %__MODULE__{real: %numericType{}}) do
+    float_conversion = do_to_polar(ca)
+
+    converted_magnitude = numericType.new(float_conversion.magnitude)
+    converted_angle = numericType.new(float_conversion.angle)
+    ComplexNum.Polar.new(converted_magnitude, converted_angle)
+  end
+
+  defp do_to_polar(ca = %__MODULE__{}) do
     angle = :math.atan2(N.to_float(ca.imaginary), N.to_float(ca.real))
     ComplexNum.Polar.new(magnitude(ca), angle)
+  end
+
+
+end
+
+defimpl Inspect, for: ComplexNum.Cartesian do
+  def inspect(ca = %ComplexNum.Cartesian{}, _opts) do
+    "#ComplexNum.Cartesian<#{inspect(ca.real)} + #{inspect(ca.imaginary)}·𝑖>"
   end
 end
