@@ -1,44 +1,44 @@
 defmodule ComplexNum.Polar do
-  defstruct [:magnitude, :angle]
+  # Uses the `real` part of the ComplexNum struct to store the `magnitude`
+  # And uses the `imaginary` part of the ComplexNum struct to store the `angle`.
 
   alias Numbers, as: N
 
   def new(magnitude, angle \\ 0)
   def new(magnitude, angle) when is_number(magnitude) and is_number(angle) do
-    %__MODULE__{magnitude: magnitude, angle: angle}
+    %ComplexNum{mode: :polar, magnitude: magnitude, angle: angle}
   end
   def new(magnitude = %numeric{}, angle = %numeric{}) do
-    %__MODULE__{magnitude: magnitude, angle: angle}
+    %ComplexNum{mode: :polar, magnitude: magnitude, angle: angle}
   end
   def new(magnitude = %numeric{}, angle) when is_number(angle) do
-    %__MODULE__{magnitude: magnitude, angle: numeric.new(angle)}
+    %ComplexNum{mode: :polar, magnitude: magnitude, angle: numeric.new(angle)}
   end
   def new(magnitude, angle = %numeric{}) when is_number(magnitude) do
-    %__MODULE__{magnitude: numeric.new(magnitude), angle: angle}
+    %ComplexNum{mode: :polar, magnitude: numeric.new(magnitude), angle: angle}
   end
 
-
-  def magnitude_part(pa = %__MODULE__{}), do: pa.magnitude
+  def magnitude_part(pa = %ComplexNum{mode: :polar}), do: pa.real
   def magnitude_part(number), do: number
 
-  def angle_part(pa = %__MODULE__{}), do: pa.angle
+  def angle_part(pa = %ComplexNum{mode: :polar}), do: pa.imaginary
   def angle_part(number), do: number
 
-  def mult(pa = %__MODULE__{}, pb = %__MODULE__{}) do
-    new(N.mult(pa.magnitude, pb.magnitude), N.add(pa.angle, pb.angle))
+  def mult(pa = %ComplexNum{mode: :polar}, pb = %ComplexNum{mode: :polar}) do
+    new(N.mult(pa.real, pb.magnitude), N.add(pa.imaginary, pb.angle))
   end
 
-  def div(pa = %__MODULE__{}, pb = %__MODULE__{}) do
-    new(N.div(pa.magnitude, pb.magnitude), N.sub(pa.angle, pb.angle))
+  def div(pa = %ComplexNum{mode: :polar}, pb = %ComplexNum{mode: :polar}) do
+    new(N.div(pa.real, pb.magnitude), N.sub(pa.imaginary, pb.angle))
   end
 
-  def pow(pa = %__MODULE__{}, exponent) when is_integer(exponent) do
-    new(N.pow(pa.magnitude, exponent), N.mult(pa.angle, exponent))
+  def pow(pa = %ComplexNum{mode: :polar}, exponent) when is_integer(exponent) do
+    new(N.pow(pa.real, exponent), N.mult(pa.imaginary, exponent))
   end
 
-  def to_cartesian(pa = %__MODULE__{}) do
-    real = N.mult(pa.magnitude, :math.cos(N.to_float(pa.angle)))
-    imaginary = N.mult(pa.magnitude, :math.sin(N.to_float(pa.angle)))
+  def to_cartesian(pa = %ComplexNum{mode: :polar}) do
+    real = N.mult(pa.real, :math.cos(N.to_float(pa.imaginary)))
+    imaginary = N.mult(pa.real, :math.sin(N.to_float(pa.imaginary)))
     ComplexNum.Cartesian.new(real, imaginary)
   end
 end
