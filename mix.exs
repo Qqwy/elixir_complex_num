@@ -3,7 +3,7 @@ defmodule ComplexNum.Mixfile do
 
   def project do
     [app: :complex_num,
-     version: "0.2.0",
+     version: "1.0.0",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -48,7 +48,7 @@ defmodule ComplexNum.Mixfile do
 
   defp package do
     [# These are the default files included in the package
-      name: :numbers,
+      name: :complex_num,
       files: ["lib", "mix.exs", "README*", "LICENSE"],
       maintainers: ["Wiebe-Marten Wijnja/Qqwy"],
       licenses: ["MIT"],
