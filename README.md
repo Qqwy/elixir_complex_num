@@ -37,7 +37,7 @@ ComplexNum itself also follows the Numeric behaviour, which means that it can be
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+The package can be installed as:
 
   1. Add `complex_num` to your list of dependencies in `mix.exs`:
 
