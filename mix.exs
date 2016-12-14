@@ -3,7 +3,7 @@ defmodule ComplexNum.Mixfile do
 
   def project do
     [app: :complex_num,
-     version: "1.0.0",
+     version: "1.0.1",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -52,7 +52,7 @@ defmodule ComplexNum.Mixfile do
       files: ["lib", "mix.exs", "README*", "LICENSE"],
       maintainers: ["Wiebe-Marten Wijnja/Qqwy"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/Qqwy/elixir_number/"}
+      links: %{"GitHub" => "https://github.com/Qqwy/elixir_complex_num/"}
     ]
   end
 end
