@@ -101,6 +101,15 @@ defmodule ComplexNum do
     def unquote(operation)(ca = %ComplexNum{mode: Cartesian}, cb = %ComplexNum{mode: Cartesian}) do
       Cartesian.unquote(operation)(ca, cb)
     end
+
+    # PolarOrCartesian + AnyNumeric
+    def unquote(operation)(ca = %ComplexNum{mode: mode}, b) do
+      mode.unquote(operation)(ca, mode.new(b))
+    end
+    # AnyNumeric + PolarOrCartesian
+    def unquote(operation)(a, cb = %ComplexNum{mode: mode}) do
+      mode.unquote(operation)(mode.new(a), cb)
+    end
   end
 
 
@@ -200,8 +209,21 @@ defmodule ComplexNum do
 end
 
 defimpl Inspect, for: ComplexNum do
+  def inspect(polar = %ComplexNum{mode: ComplexNum.Polar, real: 1}, _opts) do
+    "#ComplexNum (Polar) <e^(𝑖#{inspect(polar.imaginary)})>"
+  end
+  def inspect(polar = %ComplexNum{mode: ComplexNum.Polar, imaginary: 0}, _opts) do
+    "#ComplexNum (Polar) <#{inspect(polar.real)}>"
+  end
   def inspect(polar = %ComplexNum{mode: ComplexNum.Polar}, _opts) do
     "#ComplexNum (Polar) <#{inspect(polar.real)} · e^(𝑖#{inspect(polar.imaginary)})>"
+  end
+
+  def inspect(ca = %ComplexNum{mode: ComplexNum.Cartesian, imaginary: 0}, _opts) do
+    "#ComplexNum (Cartesian) <#{inspect(ca.real)}>"
+  end
+  def inspect(ca = %ComplexNum{mode: ComplexNum.Cartesian, real: 0}, _opts) do
+    "#ComplexNum (Cartesian) <#{inspect(ca.imaginary)}·𝑖>"
   end
   def inspect(ca = %ComplexNum{mode: ComplexNum.Cartesian}, _opts) do
     "#ComplexNum (Cartesian) <#{inspect(ca.real)} + #{inspect(ca.imaginary)}·𝑖>"
