@@ -37,14 +37,15 @@ defmodule ComplexNum do
 
   @behaviour Numeric
 
-  def new(real, imaginary \\ 0, opts \\ [polar: false])
-  def new(real, imaginary, opts)  do
-    if opts[:polar] do
-      Polar.new(real, imaginary)
-    else
-      Cartesian.new(real, imaginary)
-    end
-  end
+  def new(real, imaginary \\ 0, make_polar \\ :cartesian)
+  def new(real, imaginary, :cartesian), do: Cartesian.new(real, imaginary)
+  def new(real, imaginary, :polar),     do: Polar.new(real, imaginary)
+
+  def coerce(ca = %ComplexNum{mode: Cartesian}, num), do: {ca,            new(num)}
+  def coerce(ca = %ComplexNum{mode: Polar}, num),     do: {ca, new(num, 0, :polar)}
+  def coerce(num, cb = %ComplexNum{mode: Cartesian}), do: {new(num),            cb}
+  def coerce(num, cb = %ComplexNum{mode: Polar}),     do: {new(num, 0, :polar), cb}
+
 
 
   @doc """
@@ -143,7 +144,6 @@ defmodule ComplexNum do
   This is a precise operation for both Cartesian and Polar form.
   """
   def magnitude_squared(complex)
-
 
   @doc """
   Returns the `angle` of the complex number.

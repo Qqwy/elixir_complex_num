@@ -2,7 +2,7 @@ defmodule ComplexNum.Polar do
   # Uses the `real` part of the ComplexNum struct to store the `magnitude`
   # And uses the `imaginary` part of the ComplexNum struct to store the `angle`.
 
-  alias ComplexNum.{Polar}
+  alias ComplexNum.{Cartesian, Polar}
 
   alias Numbers, as: N
 
@@ -53,6 +53,28 @@ defmodule ComplexNum.Polar do
   """
   def angle(pa = %ComplexNum{mode: Polar}), do: pa.imaginary
   def angle(number), do: number
+
+  @doc """
+  Adds two Complex Numbers in Polar Form.
+
+  This is a lossy operation, as the two numbers need first to both
+  be converted to Cartesian Form, and the result is then converted back to Polar form.
+  """
+  def add(pa = %ComplexNum{mode: Polar}, pb = %ComplexNum{mode: Polar}) do
+    Cartesian.add(to_cartesian(pa), to_cartesian(pb))
+    |> Cartesian.to_polar
+  end
+
+  @doc """
+  Subtracts a Complex Number in Polar Form from another.
+
+  This is a lossy operation, as the two numbers need first to both
+  be converted to Cartesian Form, and the result is then converted back to Polar form.
+  """
+  def sub(pa = %ComplexNum{mode: Polar}, pb = %ComplexNum{mode: Polar}) do
+    Cartesian.sub(to_cartesian(pa), to_cartesian(pb))
+    |> Cartesian.to_polar
+  end
 
   @doc """
   Multiplies two Complex Numbers in Polar form.
