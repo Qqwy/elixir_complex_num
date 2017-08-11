@@ -35,8 +35,6 @@ defmodule ComplexNum do
 
   alias ComplexNum.{Cartesian, Polar}
 
-  @behaviour Numeric
-
   def new(real, imaginary \\ 0, make_polar \\ :cartesian)
   def new(real, imaginary, :cartesian), do: Cartesian.new(real, imaginary)
   def new(real, imaginary, :polar),     do: Polar.new(real, imaginary)

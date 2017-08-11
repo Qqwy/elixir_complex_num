@@ -20,9 +20,6 @@ defmodule ComplexNum.Cartesian do
   defstruct [:real, :imaginary]
 
   alias Numbers, as: N
-  # ComplexNum.Cartesian itself follows the rules in Numeric,
-  # and therefore it is also possible to nest them (and built Quaternions that way?!)
-  @behaviour Numeric
 
   @doc """
   Creates a new Cartesian Complex Number.
