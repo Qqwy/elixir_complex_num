@@ -55,3 +55,7 @@ The package can be installed as:
     end
     ```
 
+## Changelog
+
+- 1.1.0 Support for Numbers v5.0.0.
+- 1.0.0 Stable release.

@@ -3,7 +3,7 @@ defmodule ComplexNum.Mixfile do
 
   def project do
     [app: :complex_num,
-     version: "1.0.3",
+     version: "1.1.0",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -39,10 +39,10 @@ defmodule ComplexNum.Mixfile do
     [
       {:earmark, ">= 0.0.0", only: [:dev]}, # Markdown, dependency of ex_doc
       {:ex_doc, "~> 0.14", only: [:dev]},    # Documentation for Hex.pm
-      {:numbers, "~> 2.0"},
-      {:decimal, "~> 1.3", only: [:dev, :test]},
-      {:ratio, "~> 1.2", only: [:dev, :test]},
+      {:numbers, "~> 5.0"},
 
+      {:decimal, "~> 1.3", optional: true},
+      {:ratio, "~> 2.2", optional: true},
     ]
   end
 
