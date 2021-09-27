@@ -41,7 +41,7 @@ defmodule ComplexNum.Mixfile do
       {:ex_doc, "~> 0.14", only: [:dev]},    # Documentation for Hex.pm
       {:numbers, "~> 5.0"},
 
-      {:decimal, "~> 1.3", optional: true},
+      {:decimal, "~> 2.0", optional: true},
       {:ratio, "~> 2.2", optional: true},
     ]
   end
