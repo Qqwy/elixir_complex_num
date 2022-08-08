@@ -42,7 +42,7 @@ defmodule ComplexNum.Mixfile do
       {:numbers, "~> 5.0"},
 
       {:decimal, "~> 2.0", optional: true},
-      {:ratio, "~> 2.2", optional: true},
+      {:ratio, "~> 3.0", optional: true},
     ]
   end
 
